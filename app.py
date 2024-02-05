@@ -131,7 +131,7 @@ filtered_columns = filtered_columns.sort_values(by='upvotes', ascending=True)
 main_content = st.empty()
 
 # Opzioni nella barra laterale
-opzione = st.sidebar.selectbox("Select the variabile:", ["Home", "Dataset", "Atk & Def by Levels", "Types", "Attributes", "Race", "Views & Votes", "Ban", "Card Trap Monster", "Rarity", "Staple", "Treated_as", "Temporal Analysis"])
+opzione = st.sidebar.selectbox("Select the variable:", ["Home", "Dataset", "Atk & Def by Levels", "Types", "Attributes", "Race", "Views & Votes", "Ban", "Card Trap Monster", "Rarity", "Staple", "Treated_as", "Temporal Analysis"])
 
 ##-----------------------------------HOME----------------------------------------------##
 if opzione == "Home":
