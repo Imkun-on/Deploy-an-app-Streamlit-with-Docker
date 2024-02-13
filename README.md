@@ -15,8 +15,8 @@
 <li>Creazione di un’immagine Docker dell’applicazione e delle relative dipendenze.</li>
 <li>Creazione delle istanze virtuali con AWS EC2.</li>
 <li>Creazione di uno Swarm Docker composto da un gestore e tre nodi worker.</li>
-<li>Creazione di servizi nello sciame Swarm usando Postgre, Apache e Redis.</li>
-<li>Creazione di uno Stack Docker in modo che nessuno che nessuno stack venga eseguito sul nodo Manager.</li>
+<li>Creazione di servizi Postgre, Apache e Redis.</li>
+<li>Creazione di uno Stack Docker in modo che nessuno stack venga eseguito sul nodo Manager.</li>
 <li>Archiviazione su Docker Hub.</li>
 </ul>
 <br> </br>
