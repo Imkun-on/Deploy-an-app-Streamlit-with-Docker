@@ -3,172 +3,172 @@
 
 <body>
 
-<h1>Progetto Cloud Computing</h1>
-<h2>L'applicazione</h2>
-<p> Ai fini di questo progetto, ho utilizzato un'applicazione Streamlit che fornisce informazioni dettagliate sulle carte di Yu-Gi-Oh! a partire dal 2000 fino ad oggi. </p> 
-<p> Questa applicazione è progettata per capire quali sono le carte più apprezzate, visualizzate, bannate e criticate per la loro potenza o rarità.</p>
+<h1>Cloud Computing Project</h1>
+<h2>Deploy a Streamlit app with Docker using AWS EC2 and as services Docker Swarm, Apache, Docker Stack, PostgreSQL, and Redis.</h2>
+<h2>The Application</h2>
+<p>For the purposes of this project, I used a Streamlit application that provides detailed information on Yu-Gi-Oh! cards from 2000 to the present.</p>
+<p>This application is designed to understand which cards are the most appreciated, viewed, banned, and criticized for their power or rarity.</p>
 
-<h2>Quali sono i passaggi?</h2>
-<p> L’idea è quella di distribuire l’applicazione utilizzando Amazon Web Services (AWS) ed i suoi prodotti basati su cloud.</p>
-<p> Per avere un’applicazione funzionante sul cloud, questi sono i passaggi che ho seguito: </p>
+<h2>What are the steps?</h2>
+<p>The idea is to deploy the application using Amazon Web Services (AWS) and its cloud-based products.</p>
+<p>To have a functioning application in the cloud, these are the steps I followed:</p>
 <ul>
-<li>Creazione di un’immagine Docker dell’applicazione e delle relative dipendenze.</li>
-<li>Creazione delle istanze virtuali con AWS EC2.</li>
-<li>Creazione di uno Swarm Docker composto da un gestore e tre nodi worker.</li>
-<li>Creazione di servizi Postgre, Apache e Redis.</li>
-<li>Creazione di uno Stack Docker in modo che nessuno stack venga eseguito sul nodo Manager.</li>
-<li>Archiviazione su Docker Hub.</li>
+<li>Creation of a Docker image of the application and its dependencies.</li>
+<li>Creation of virtual instances with AWS EC2.</li>
+<li>Creation of a Docker Swarm composed of one manager and three worker nodes.</li>
+<li>Creation of PostgreSQL, Apache, and Redis services.</li>
+<li>Creation of a Docker Stack so that no stack runs on the Manager node.</li>
+<li>Storage on Docker Hub.</li>
 </ul>
 <br> </br>
-<h2> Creazione di un’immagine Docker dell’applicazione e delle relative dipendenze.</h2>
+<h2>Creation of a Docker image of the application and its dependencies.</h2>
 <p>
-La creazione dell’immagine docker l’ho applicata per creare tutto ciò di cui ho bisogno per eseguire il software, quindi codice, librerie, variabili; cioè a distribuire quel pacchetto ed eseguire il software in un ambiente containerizzato.
-Prima di creare l’immagine Docker sono andato a creare prima un file in formato testo denominato “requirements.txt” dove al suo interno sono incluse tutte le librerie con le specifiche versioni sia per l’analisi descrittiva dei dati che per la creazione dell’applicazione streamlit.
+The creation of the docker image was applied to create everything needed to run the software, meaning code, libraries, variables; that is, to distribute that package and run the software in a containerized environment.
+Before creating the Docker image, I first created a text file named “requirements.txt” where all the libraries with their specific versions are included, both for the descriptive analysis of the data and for the creation of the streamlit application.
 </p>
 
-<p>Dopo aver creato il file “requirements.txt”, sono andato a creare il file Docker utilizzando questi codici:</p>
+<p>After creating the “requirements.txt” file, I went on to create the Docker file using these codes:</p>
 
 <pre>
 <code>
-# Usa un'immagine base di Python
+# Use a Python base image
 FROM python:3.8
 
-# Imposta una directory di lavoro
+# Set a working directory
 WORKDIR /app
 
-# Copia i file necessari nell'immagine
+# Copy necessary files into the image
 COPY . /app
 
-# Installa le dipendenze
+# Install dependencies
 RUN pip install -r requirements.txt
 
-# Espone la porta 8501 (porta predefinita di Streamlit)
+# Expose port 8501 (Streamlit's default port)
 EXPOSE 8501
 
-# Comando per eseguire l'applicazione
+# Command to run the application
 CMD ["streamlit", "run", "app.py"]
 </code>
 </pre>
 
-<p>Dopo aver creato il file Docker sono andato a trasferire tutti i file sul mio profilo github.</p>
+<p>After creating the Docker file, I transferred all files to my GitHub profile.</p>
 
 <br> </br>
 
-<h2>Creazione delle istanze virtuali con AWS EC2.</h2>
+<h2>Creation of virtual instances with AWS EC2.</h2>
 <p>
-Per la creazione delle istanze virtuali ho utilizzato Amazon Web Service (AWS) ed ho utilizzato Amazon Elastic Compute Cloud (EC2) per crearne 4 che risultano idonee al piano gratuito. Per la creazione delle istanze virtuali idonee alla mia applicazione ho selezionato:
+For the creation of virtual instances, I used Amazon Web Service (AWS) and selected Amazon Elastic Compute Cloud (EC2) to create 4 instances that are eligible for the free tier. For creating virtual instances suitable for my application, I selected:
 </p>
 <ul>
-<li><strong>Tipologia di istanza</strong>: t2.micro</li>
-<li><strong>Autorizzazione del traffico </strong>: HTTPS & HTTP  per configurare un endpoint, ad esempio durante la creazione di un server Web)</li>
-<li><strong>Autorizzazione del modulo di traffico </strong>: SSH (per connettermi alla mia istanza virtuale)</li>
-<li><strong> Amazon Machine Image (AMI) </strong>: Ubuntu Server 22.04 LTS (HVM).</li>
-<li><strong> Creazione di una coppia di chiavi </strong>: per la registrazione in formato pem per l’utilizzo con OpenSSH.</li>
+<li><strong>Instance type</strong>: t2.micro</li>
+<li><strong>Traffic authorization</strong>: HTTPS & HTTP (to configure an endpoint, for example, when creating a web server)</li>
+<li><strong>Traffic module authorization</strong>: SSH (to connect to my virtual instance)</li>
+<li><strong>Amazon Machine Image (AMI)</strong>: Ubuntu Server 22.04 LTS (HVM).</li>
+<li><strong>Creating a key pair</strong>: for logging in using pem format for use with OpenSSH.</li>
 </ul>
 
-<p>Dopo aver creato queste 4 istanze ho dovuto aggiungere ulteriori regole di sicurezza oltre a quelle già predefinite.</p>
+<p>After creating these 4 instances, I had to add additional security rules in addition to the default ones.</p>
 
 <table>
 <tr>
-<th>PROTOCOLLO</th>
-<th>INTERVALLO PORTE</th>
-<th>ORIGINE</th>
-<th>DESCRIZIONE</th>
+<th>PROTOCOL</th>
+<th>PORT RANGE</th>
+<th>SOURCE</th>
+<th>DESCRIPTION</th>
 </tr>
 <tr>
 <td>TCP</td>
 <td>2376</td>
 <td>0.0.0.0/0</td>
-<td>Questa porta è necessaria per il funzionamento di Docker Machine. Docker Machine viene usato per orchestrare gli host Docker.</td>
+<td>Necessary for Docker Machine operations. Docker Machine is used to orchestrate Docker hosts.</td>
 </tr>
 <tr>
 <td>TCP</td>
 <td>2377</td>
 <td>0.0.0.0/0</td>
-<td>Usata per la comunicazione tra i nodi di uno sciame Docker o di un cluster.</td>
+<td>Used for communication between nodes of a Docker swarm or cluster.</td>
 </tr>
 <tr>
 <td>TCP</td>
 <td>7946</td>
 <td>0.0.0.0/0</td>
-<td>Usata per la comunicazione tra i nodi (container network discovery).</td>
+<td>Used for node communication (container network discovery).</td>
 </tr>
 <tr>
 <td>TCP</td>
 <td>8501</td>
 <td>0.0.0.0/0</td>
-<td>Usata come porta predefinita per le applicazioni Streamlit.</td>
+<td>Used as the default port for Streamlit applications.</td>
 </tr>
 <tr>
 <td>UDP</td>
 <td>4789</td>
 <td>0.0.0.0/0</td>
-<td> Usata per il traffico di rete sovrapposto (rete in entrata del contenitore).</td>
+<td>Used for overlay network traffic (inbound container network).</td>
 </tr>
 </table>
 
-<p>Per avere un organizzazione migliore con queste istanze vado ad attribuirgli un nome ossia:</p>
+<p>To better organize these instances, I assigned them names:</p>
 <ul>
 <li>Node_Master</li>
 <li>Node_1</li>
 <li>Node_2</li>
 <li>Node_3</li>
 </ul>
-<p>Questo per poter utilizzare meglio Docker Swarm.</p>
-
+<p>This is to make better use of Docker Swarm.</p>
 <br></br>
 
-<h2>Creazione di uno Swarm Docker composto da un gestore e tre nodi worker.</h2>
+<h2>Creation of a Docker Swarm consisting of one manager and three worker nodes.</h2>
 <p>
-Per l’assegnazione dei ruoli alle istanze utilizzo Docker Swarm per creare uno sciame Docker composto da un manager e 3 utenti.
+To assign roles to the instances, I use Docker Swarm to create a Docker swarm consisting of one manager and 3 workers.
 </p>
 <p>
-Quindi comincio con l’avviare il Node_Master e inserisco nel terminale questi comandi:
+I start with booting up the Node_Master and enter these commands in the terminal:
 </p>
 
-<p> Aggiorno l'elenco dei pacchetti disponibili e le loro versioni, ma non installa o aggiorna alcun pacchetto. sudo consente di eseguire il comando come superutente (root), garantendo i permessi necessari per aggiornare gli elenchi dei pacchetti. </p> 
-<p> apt è il gestore di pacchetti utilizzato nelle distribuzioni Debian e Ubuntu.</p>
+<p> I update the list of available packages and their versions, but do not install or upgrade any packages. sudo allows running the command as a superuser (root), ensuring the necessary permissions to update the package lists. </p> 
+<p> apt is the package manager used in Debian and Ubuntu distributions.</p>
 <pre><code>
 sudo apt update
 </code></pre>
-<p> Installo Docker dalla repository di pacchetti ufficiale del tuo sistema operativo. Anche qui, sudo permette di eseguire il comando con privilegi di root, che sono necessari per installare software sul sistema. </p>
-<p> docker.io è il nome del pacchetto di Docker nelle repository di pacchetti ufficiali di Ubuntu e altre distribuzioni basate su Debian. </p>
+<p> I install Docker from your operating system's official package repository. Here again, sudo allows executing the command with root privileges, which are necessary to install software on the system. </p>
+<p> docker.io is the package name for Docker in the official package repositories of Ubuntu and other Debian-based distributions. </p>
 <pre><code>
 sudo apt install docker.io
 </code></pre>
-<p> Avvio il servizio Docker utilizzando systemctl, che è un sistema di gestione dei servizi per Linux che usa systemd. Questo comando fa sì che Docker (il programma in background) venga avviato, permettendo l'esecuzione di container Docker sul sistema. Anche in questo caso, sudo è necessario per ottenere i permessi adeguati per avviare i servizi di sistema. </p>
+<p> I start the Docker service using systemctl, which is a service management system for Linux that uses systemd. This command causes Docker (the background program) to start, allowing Docker containers to run on the system. Again, sudo is needed to obtain the appropriate permissions to start system services. </p>
 <pre><code>
 sudo systemctl start docker
 </code></pre>
-<p> Abilito il servizio Docker a essere avviato automaticamente all'avvio del sistema. Questo assicura che Docker sia disponibile anche dopo un riavvio del sistema, senza che sia necessario avviarlo manualmente ogni volta. systemctl con enable crea dei collegamenti simbolici necessari per avviare il servizio Docker durante il processo di avvio del sistema. </p>
+<p> I enable the Docker service to start automatically at system boot. This ensures that Docker is available even after a system reboot, without the need to manually start it each time. systemctl with enable creates the necessary symbolic links to start the Docker service during the system boot process. </p>
 <pre><code>
 sudo systemctl enable docker
 </code></pre>
-<p> Aggiungo l'utente corrente al gruppo docker, permettendo così all'utente di eseguire i comandi Docker senza dover utilizzare sudo ogni volta. </p>
-<p> -aG sta per "append to group" (aggiungi al gruppo), e docker è il nome del gruppo. ${USER} è una variabile d'ambiente che rappresenta il nome dell'utente corrente.  </p>
+<p> I add the current user to the docker group, thereby allowing the user to execute Docker commands without needing to use sudo every time. </p>
+<p> -aG stands for "append to group", and docker is the group name. ${USER} is an environment variable representing the current user's name.  </p>
 <pre><code>
 sudo usermod -aG docker ${USER}
 </code></pre>
 <p>
-Per verificare se le modifiche sono state eseguite con successo mi disconnetto e riconnetto nella seguente istanza.
+To verify that the changes were successful, I log out and log back into the following instance.
 </p>
 <p>
-Procedo con l’assegnazione del ruolo manager con questo codice:
+I proceed with assigning the manager role with this code:
 </p>
 <pre><code>
 docker swarm init --advertise-addr 172.31.92.118
 </code></pre>
 <p>
-ottenendo come output una conferma che questa istanza ora è diventata manager e fornendomi un codice per assegnare alle altre istanze il ruolo di utente.
+obtaining output confirmation that this instance is now a manager and providing me with a code to assign the other instances the role of worker.
 </p>
 <pre><code>
 docker swarm join --token SWMTKN-1-2ca4tuegeusncn42i02l8lw4yc8t8vzpj5ovw1ewm8i98h6tmp-eqouyv9esuom2moygvjgrltj8 172.31.92.118:2377
 </code></pre>
 <p>
-Questo codice devo andarlo ad inserire ad ogni istanza utente che ho creato in modo da poter creare uno sciame.
+I must enter this code into each worker instance I created to form a swarm.
 </p>
 <p>
-Ritorno al nodo manager ed utilizzo il seguente comando per osservare tutti i nodi con i rispettivi ruoli:
+I return to the manager node and use the following command to view all nodes with their respective roles:
 </p>
 <pre><code>
 docker node ls
@@ -176,63 +176,63 @@ docker node ls
 
 <br></br>
 
-<h2>Distribuzione dell’applicazione.</h2>
+<h2>Deployment of the application.</h2>
 <p>
-Prima di creare un servizio nello sciame, ho deciso di distribuire l’applicazione attraverso un metodo particolare, ossia:
+Before creating a service in the swarm, I decided to deploy the application through a particular method, namely:
 </p>
 
-<p> Clono il codice sorgente di un'applicazione Streamlit che è stata preparata per essere eseguita come un container Docker dalla mia repository di github. </p>
+<p> I clone the source code of a Streamlit application that has been prepared to run as a Docker container from my GitHub repository. </p>
 <pre><code>
 git clone https://github.com/Imkun-on/Streamlit-app-Docker.git
 </code></pre>
-<p> Elenco i file e le directory nel percorso corrente, anche per verificare che la clonazione sia andata a buon fine e per visualizzare i contenuti della directory di lavoro corrente. </p>
+<p> I list the files and directories in the current path, also to verify that the cloning was successful and to view the contents of the current working directory. </p>
 <pre><code>
 ls
 </code></pre>
-<p> Cambio la directory corrente alla directory appena clonata Streamlit-app-Docker, che contiene il Dockerfile e i file sorgente dell'applicazione. </p>
+<p> I change the current directory to the newly cloned Streamlit-app-Docker directory, which contains the Dockerfile and the application source files. </p>
 <pre><code>
 cd Streamlit-app-Docker/
 </code></pre>
-<p> Nuovamente, elenco i file e le directory nella directory corrente, ora all'interno di Streamlit-app-Docker, per mostrare il contenuto della directory dell'applicazione. </p>
+<p> Again, I list the files and directories in the current directory, now inside Streamlit-app-Docker, to show the content of the application directory. </p>
 <pre><code>
 ls
 </code></pre>
-<p> Creo un'immagine Docker per l'applicazione Streamlit, utilizzando il Dockerfile presente nella directory corrente. L'immagine viene taggata con il nome. </p> 
+<p> I create a Docker image for the Streamlit application, using the Dockerfile in the current directory. The image is tagged with the name. </p> 
 <pre><code>
-docker build -t imkun/nome-app-streamlit .
+docker build -t imkun/app-name-streamlit .
 </code></pre>
-<p> Elenco tutte le immagini Docker disponibili sul sistema, permettendomi di vedere l'immagine appena creata e altre immagini che potrebbero essere presenti. </p>
+<p> I list all the Docker images available on the system, allowing me to see the newly created image and any other images that might be present. </p>
 <pre><code>
 docker images -a
 </code></pre>
-<p> Avvio un container Docker in modalità "detached" (in background) utilizzando l'immagine imkun/nome-app-streamlit, mappando la porta 8501 del container sulla porta 8501 dell'host. </p>
-<p> Questo mi permette di accedere all'applicazione Streamlit tramite il browser all'indirizzo dell'host sulla porta 8501. </p>
+<p> I start a Docker container in "detached" mode (in the background) using the imkun/app-name-streamlit image, mapping the container's port 8501 to the host's port 8501. </p>
+<p> This allows me to access the Streamlit application via the browser at the host's address on port 8501. </p>
 <pre><code>
-docker run -d -p 8501:8501 imkun/nome-app-streamlit
+docker run -d -p 8501:8501 imkun/app-name-streamlit
 </code></pre>
-<p> Elenco tutti i container Docker attualmente in esecuzione, permettendomi di verificare che il container dell'applicazione sia avviato correttamente. </p>
+<p> I list all the Docker containers currently running, allowing me to verify that the application container has started correctly. </p>
 <pre><code>
 docker ps
 </code></pre>
-<p> Fermo un container Docker in esecuzione, specificando l'ID o il nome del container come argomento. </p>
+<p> I stop a running Docker container, specifying the container's ID or name as an argument. </p>
 <pre><code>
-docker stop &lt;nome_container o id&gt;
+docker stop <container_name or id>
 </code></pre>
-<p> Rimuovo tutti i container Docker fermati, pulendo il sistema dai container non più necessari. docker ps -a -q elenca gli ID di tutti i container, e docker rm li rimuove. </p>
+<p> I remove all stopped Docker containers, cleaning the system from containers that are no longer needed. docker ps -a -q lists the IDs of all containers, and docker rm removes them. </p>
 <pre><code>
 docker rm $(docker ps -a -q)
 </code></pre>
 
 <br></br>
 
-<h2>Creazione di servizi.</h2>
+<h2>Creation of Services.</h2>
 <p>
-Creo un servizio Docker nel contesto di un cluster Docker Swarm dal nodo manager, avviando l'applicazione come un servizio distribuito con 4 repliche (istanze) del container, rendendo l'applicazione altamente disponibile e scalabile.
+I create a Docker service in the context of a Docker Swarm cluster from the manager node, launching the application as a distributed service with 4 replicas (instances) of the container, making the application highly available and scalable.
 </p>
 <pre><code>
-docker service create --name nome-app-streamlit --replicas 3 -p 8501:8501 imkun/nome-app-streamlit:latest (da inserire al codice sopra)
+docker service create --name app-name-streamlit --replicas 3 -p 8501:8501 imkun/app-name-streamlit:latest (to be inserted into the code above)
 </code></pre>
-<p>Applico la stessa procedura per i servizi Postgree,Apache e Redis, specificando il numero di repliche e versione del servizio (per vedere la versione del servizio sono andato su Docker Hub): </p>
+<p>I apply the same procedure for Postgres, Apache, and Redis services, specifying the number of replicas and service version (to see the service version, I went to Docker Hub): </p>
 <pre><code>
 docker service create --name redis --replicas 4 redis:latest
 </code></pre>
@@ -244,92 +244,93 @@ docker service create --name postgres --replicas 1 \
   -e POSTGRES_PASSWORD=Databas3 \
   postgres
 </code></pre>
-<p>Il motivo per cui ho selezionato questi servizi è per il fatto che:</p>
+<p>The reason I selected these services is because:</p>
 <ul>
-  <li><strong>Apache</strong>: può fungere da reverse proxy, indirizzando le richieste dal web alla mia applicazione Streamlit. Questo mi permette di esporre la tua app su Internet in modo sicuro e gestire meglio il traffico in ingresso.
-inoltre se l'applicazione cresce in popolarità, Apache può aiutare a distribuire il carico tra più istanze dell'applicazione, migliorando le prestazioni e la disponibilità.</li>
-  <li><strong>Redis</strong>: per le operazioni asincrone o di lunga durata, come l'importazione di grandi set di dati o l'esecuzione di analisi complesse, Redis può gestire le code di lavori, migliorando l'efficienza dell'applicazione.</li>
-  <li><strong>PostgreSQL</strong>: può servire come database principale per memorizzare i dati di Yu-Gi-Oh!, inclusi mazzi, carte, statistiche di gioco, e altro ancora.</li>
+  <li><strong>Apache</strong>: can act as a reverse proxy, directing web requests to my Streamlit application. This allows me to securely expose your app to the Internet and better manage incoming traffic.
+Moreover, if the application grows in popularity, Apache can help distribute the load among multiple application instances, improving performance and availability.</li>
+  <li><strong>Redis</strong>: for asynchronous or long-duration operations, such as importing large data sets or performing complex analyses, Redis can manage job queues, improving the efficiency of the application.</li>
+  <li><strong>PostgreSQL</strong>: can serve as the main database to store Yu-Gi-Oh! data, including decks, cards, game statistics, and more.</li>
 </ul>
 <p>
-Dopo aver creato questi servizi, verifico se sono presenti tutti quanti: </p>
+After creating these services, I check if they are all present: </p>
 <pre><code>
 docker service ls
 </code></pre>
-<p>Poi seleziono una qualsiasi istanza che fa parte dello sciame, eseguo la connessione, copio l’indirizzo Ip pubblico, lo incollo nel browser e inserisco il numero della porta 8501, ed ecco che la mia app si può vedere. </p>
+<p>Then I select any instance that is part of the swarm, connect, copy the public IP address, paste it into the browser, and enter port number 8501, and there you go, my app is visible. </p>
 
 <br></br>
 
-<h2> Creazione di uno Stack Docker in modo che nessuno stack venga eseguito sul nodo Manager.</h2>
-<p> Poichè abbiamo molti servizi vado ad utilizzare Stack Docker che mi consente di distribuire e raggruppare logicamente più servizi, che sono contenitori distribuiti in uno sciame. Quindi rimuovo tutti i servizi che ho creato.</p>
+<h2> Creation of a Docker Stack so that no stack runs on the Manager node.</h2>
+<p> Since we have many services, I use Docker Stack which allows me to deploy and logically group multiple services, which are containers distributed in a swarm. Therefore, I remove all the services I created.</p>
 <pre><code>
 docker service rm $(docker service ls -q)
 </code></pre>
-<p> Poi vado a creare un file con estensione yml specificando tutti i servizi che devo utilizzare nella mia streamlit e distribuisco lo stack utilizzando questo comando:</p>
+<p> Then I create a file with a yml extension specifying all the services I need to use in my streamlit and distribute the stack using this command:</p>
 <pre><code>
-docker stack deploy --compose-file docker-compose.yml mio_stack
+docker stack deploy --compose-file docker-compose.yml my_stack
 </code></pre>
-<p> Infine vado a guardare sia i servizi nel mio stack ed anche se non sono in esecuzione sul nodo di gestione attraverso i seguenti codici: </p>
+<p> Finally, I look at both the services in my stack and also if they are not running on the management node through the following codes: </p>
 <pre><code>
 docker stack ls
-</code></pre>pre>
+</code></pre>
 <pre><code>
-docker stack ps mio_stack
+docker stack ps my_stack
 </code></pre>
 <p> </p>
 <br></br>
 
-<h2>Archiviazione dell’immagine Docker su Docker Hub.</h2>
+
+<h2>Storing the Docker Image on Docker Hub.</h2>
 <p>
-Prima di procedere con il successivo comando, sono andato a creare un profilo su Docker Hub, in modo da archiviare l’app.
+Before proceeding with the next command, I created a profile on Docker Hub to store the app.
 </p>
-<p> Effettuo il login al Docker Hub, permettendomi di caricare (push) o scaricare (pull) immagini Docker. </p>
+<p> I log in to Docker Hub, allowing me to upload (push) or download (pull) Docker images. </p>
 <pre><code>
 docker login
 </code></pre>
-<p> Carico l'immagine taggata “latest” dell'applicazione al Docker Hub sotto il nome imkun/nome-app-streamlit. </p>
+<p> I upload the “latest” tagged image of the application to Docker Hub under the name imkun/app-name-streamlit. </p>
 <pre><code>
-docker push imkun/nome-app-streamlit:latest
+docker push imkun/app-name-streamlit:latest
 </code></pre>
-<p> Rimuovo l'immagine Docker specificata dal sistema locale. </p>
+<p> I remove the specified Docker image from the local system. </p>
 <pre><code>
-docker rmi imkun/nome-app-streamlit:latest
+docker rmi imkun/app-name-streamlit:latest
 </code></pre>
-<p> Scarico l'immagine Docker imkun/nome-app-streamlit da Docker Hub. </p>
+<p> I download the Docker image imkun/app-name-streamlit from Docker Hub. </p>
 <pre><code>
-docker pull imkun/nome-app-streamlit
+docker pull imkun/app-name-streamlit
 </code></pre>
-<p> Come ho fatto in precedenza avvio un container Docker in background utilizzando l'immagine specificata e mappando le porte come indicato. </p>
+<p> As I did previously, I start a Docker container in the background using the specified image and mapping ports as indicated. </p>
 <pre><code>
-docker run -d -p 8501:8501 imkun/nome-app-streamlit
+docker run -d -p 8501:8501 imkun/app-name-streamlit
 </code></pre>
 
 
-<h2> NOTA </h2> 
-<p> Dato che nella streamlit mancano alcune analisi da aggiungere e nel caso decidessi di apportare modifiche, prima di procedere con il deployment, vado a testare le modifiche localmente per assicurarmi che l'applicazione funzioni come previsto. </p>
-<p>Ciò lo faccio eseguendo l'applicazione Streamlit localmente </p>
+<h2> NOTE </h2> 
+<p> Since the Streamlit app is missing some analyses to add and in case I decide to make changes, before proceeding with the deployment, I test the changes locally to ensure the application functions as expected. </p>
+<p>I do this by running the Streamlit application locally </p>
 <pre><code>
 streamlit run app.py
 </code></pre>
 
-<p>Dopo aver confermato che le modifiche funzionano come previsto, vado ad aggiornare l'immagine Docker. </p> 
-<p>Questo implica la creazione di una nuova immagine Docker che incorpora le modifiche apportate.</p> 
-<p>Utilizzo il Dockerfile per costruire l'immagine, esattamente come ho fatto in precedenza: </p>
+<p>After confirming that the changes work as expected, I go on to update the Docker image. </p> 
+<p>This implies creating a new Docker image that incorporates the changes made.</p> 
+<p>I use the Dockerfile to build the image, exactly as I did previously: </p>
 <pre><code>
-docker build -t username/nome-app-streamlit:latest .
+docker build -t username/app-name-streamlit:latest .
 </code></pre>
-<p> Una volta creata l'immagine aggiornata, la carico su Docker Hub per renderla accessibile ai nodi Docker Swarm </p>
+<p> Once the updated image is created, I upload it to Docker Hub to make it accessible to the Docker Swarm nodes </p>
 <pre><code>
-docker push username/nome-app-streamlit:latest
+docker push username/app-name-streamlit:latest
 </code></pre>
-<p>Infine, dico a Docker Swarm di utilizzare l'immagine aggiornata per il servizio che sta eseguendo l’applicazione Streamlit. </p>
-<p>Se il servizio è già in esecuzione, posso aggiornarlo per usare la nuova immagine con il comando </p>
+<p>Finally, I tell Docker Swarm to use the updated image for the service running the Streamlit application. </p>
+<p>If the service is already running, I can update it to use the new image with the command </p>
 <pre><code>
-docker service update --image username/nome-app-streamlit:latest nome-del-servizio
+docker service update --image username/app-name-streamlit:latest service-name
 </code></pre>
 
-<h2> AVVISO IMPORTANTE</h2>
-<p>Se siete interessati a esplorare l'analisi dei dati che ho realizzato, vi invito a visitare il mio sito. A differenza di questo progetto, per l'analisi non ho utilizzato Streamlit. Potete trovare il sito al seguente indirizzo: <a href="https://www.kaggle.com/code/nezarec/eda-yu-gi-oh-cards" target="_blank">Analisi dei dati Yu-Gi-Oh su Kaggle 📊</a></p>
+<h2> NOTE</h2>
+<p>If you are interested in exploring the data analysis I have conducted, I invite you to visit my site. Unlike this project, I did not use Streamlit for the analysis. You can find the site at the following address: <a href="https://www.kaggle.com/code/nezarec/eda-yu-gi-oh-cards" target="_blank">Yu-Gi-Oh Data Analysis on Kaggle 📊</a></p>
 
 </body>
 </html>
