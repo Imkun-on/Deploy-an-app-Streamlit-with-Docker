@@ -183,15 +183,15 @@ Before creating a service in the swarm, I decided to deploy the application thro
 
 <p> I clone the source code of a Streamlit application that has been prepared to run as a Docker container from my GitHub repository. </p>
 <pre><code>
-git clone https://github.com/Imkun-on/Streamlit-app-Docker.git
+git clone https://github.com/Imkun-on/Deploy-an-app-Streamlit-with-Docker.git
 </code></pre>
 <p> I list the files and directories in the current path, also to verify that the cloning was successful and to view the contents of the current working directory. </p>
 <pre><code>
 ls
 </code></pre>
-<p> I change the current directory to the newly cloned Streamlit-app-Docker directory, which contains the Dockerfile and the application source files. </p>
+<p> I change the current directory to the newly cloned Deploy-an-app-Streamlit-with-Docker directory, which contains the Dockerfile and the application source files. </p>
 <pre><code>
-cd Streamlit-app-Docker/
+cd Deploy-an-app-Streamlit-with-Docker/
 </code></pre>
 <p> Again, I list the files and directories in the current directory, now inside Streamlit-app-Docker, to show the content of the application directory. </p>
 <pre><code>
